@@ -102,6 +102,14 @@ async function deletePasskeyCredential(req, res) {
 }
 
 async function updatePasskeyCredential(req, res) {
+  const { user } = req;
+  const userID = user.id;
+  console.log("userIdUpdateCredential", userID);
+
+  if (!userID) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
   const { credentialID } = req.params;
   const { name } = req.body; 
   const tenantId = process.env.PASSKEYS_TENANT_ID;
@@ -114,7 +122,7 @@ async function updatePasskeyCredential(req, res) {
 
   const options = {
     method: "PATCH",
-    headers: { apiKey: apiKey, "Content-Type": "application/json" },
+    headers: { 'apiKey': apiKey, 'Content-Type': 'application/json' },
     body: JSON.stringify({ name }),
   };
 
@@ -123,22 +131,15 @@ async function updatePasskeyCredential(req, res) {
     if (!response.ok) {
       throw new Error(`Failed to update credential: ${response.statusText}`);
     }
-    // const responseData = await response.json();
-    if (
-      response.headers.get("Content-Type")?.includes("application/json") &&
-      response.ok
-    ) {
-      const responseData = await response.json();
-      res.json({
-        message: "Credential updated successfully",
-        data: responseData,
-      });
-    } else {
-      console.error("Non-JSON response or error", response.statusText);
-    }
+
+    // Since the API does not return a body, we do not attempt to parse it as JSON
+    console.log("Update successful for credential ID:", credentialID);
+    return res.json({
+      message: "Credential updated successfully"
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 }
 

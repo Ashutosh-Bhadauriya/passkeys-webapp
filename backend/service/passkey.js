@@ -35,15 +35,12 @@ async function finishServerPasskeyLogin(options) {
 }
 
 async function listCredentials(userID) {
-  // const credentials = await passkeyApi.credentials.list();
   const credentials = await passkeyApi.user(userID).credentials();
   return credentials;
 }
 
 async function deleteCredential(credentialID) {
-  console.log("deleteCredential", credentialID);
   await passkeyApi.credential(credentialID).remove();
-  console.log("deleteCredential", credentialID); 
 }
 
 export {

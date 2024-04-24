@@ -89,23 +89,99 @@ const Dashboard = () => {
     }
 
 
+    // const updateCredential = async (credentialID: string, updatedData: { name: string }) => {
+    //     try {
+    //         const response = await fetch(`http://localhost:5001/api/passkeys/credentials/${credentialID}`, {
+    //             method: 'PATCH',
+    //             headers: { "Content-Type": "application/json" },
+    //             credentials: 'include',
+    //             body: JSON.stringify(updatedData),
+    //         });
+    
+    //         if (!response.ok) {
+    //             throw new Error('Failed to update credential');
+    //         }
+    
+    //         const responseData = await response.json();
+    //         console.log('Update successful:', responseData);
+    
+    //         // Update the local state to reflect the changed name
+    //         setCredentials(currentCredentials =>
+    //             currentCredentials.map(cred =>
+    //                 cred.id === credentialID ? { ...cred, name: updatedData.name } : cred
+    //             )
+    //         );
+    
+    //         // Show a success message
+    //         toast.success("Credential updated successfully!");
+    //     } catch (error) {
+    //         console.error('Error updating credential:', error);
+    //         // Show an error message to the user
+    //         toast.error("Failed to update credential.");
+    //     }
+    // };
+
+    // const updateCredential = async (credentialID: string, updatedData: { name: string }) => {
+    //     try {
+    //         const response = await fetch(`http://localhost:5001/api/passkeys/credentials/${credentialID}`, {
+    //             method: 'PATCH',
+    //             headers: { "Content-Type": "application/json" },
+    //             credentials: 'include',
+    //             body: JSON.stringify(updatedData),
+    //         });
+    
+    //         if (!response.ok) {
+    //             throw new Error(`Failed to update credential: ${response.status} ${response.statusText}`);
+    //         }
+    
+    //         // Attempt to read the response as text first
+    //         const text = await response.text();
+    //         let responseData;
+    //         try {
+    //             responseData = text ? JSON.parse(text) : {};
+    //         } catch (parseError) {
+    //             console.error('Failed to parse JSON:', parseError);
+    //             throw new Error('Received malformed JSON from server.');
+    //         }
+    
+    //         console.log('Update successful:', responseData);
+    
+    //         // Update the local state to reflect the changed name
+    //         setCredentials(currentCredentials =>
+    //             currentCredentials.map(cred =>
+    //                 cred.id === credentialID ? { ...cred, name: updatedData.name } : cred
+    //             )
+    //         );
+    
+    //         // Show a success message
+    //         toast.success("Credential updated successfully!");
+    //     } catch (error) {
+    //         console.error('Error updating credential:', error);
+    //         // Show an error message to the user based on the type of error
+    //         if (error.message.includes('malformed JSON')) {
+    //             toast.error("Update failed due to server error.");
+    //         } else {
+    //             toast.error(error.message);
+    //         }
+    //     }
+    // };
+
+
     const updateCredential = async (credentialID: string, updatedData: { name: string }) => {
         try {
             const response = await fetch(`http://localhost:5001/api/passkeys/credentials/${credentialID}`, {
                 method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    credentials: 'include',
-                },
+                headers: { "Content-Type": "application/json" },
+                credentials: 'include',
                 body: JSON.stringify(updatedData),
             });
     
             if (!response.ok) {
-                throw new Error('Failed to update credential');
+                throw new Error(`Failed to update credential: ${response.status} ${response.statusText}`);
             }
     
-            const responseData = await response.json();
-            console.log('Update successful:', responseData);
+            // Log the success message from the server
+            console.log('Update successful');
     
             // Update the local state to reflect the changed name
             setCredentials(currentCredentials =>

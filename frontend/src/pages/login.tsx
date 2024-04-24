@@ -3,9 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import useLogin from "@/hooks/useLogin";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CredentialRequestOptionsJSON, get } from "@github/webauthn-json";
+import { get } from "@github/webauthn-json";
 
 
 
@@ -44,7 +44,7 @@ const Login = () => {
         const { loginOptions } = await createOptionsResponse.json();
 
         if (autofill) loginOptions.mediation = "conditional";
-
+        if (autofill) loginOptions.signal = controller.signal;
 
         // Open "register passkey" dialog
         const options = await get(

@@ -8,6 +8,6 @@ router.post("/passkeys/register", checkAuth, handlePasskeyRegister);
 router.post("/passkeys/login", handlePasskeyLogin);
 router.get("/passkeys/credentials", checkAuth, listPasskeyCredentials);
 router.delete("/passkeys/credentials/:credentialID", checkAuth, deletePasskeyCredential);
-// router.patch("/passkeys/credentials/:credentialID", updatePasskeyCredential);
+router.patch("/passkeys/credentials/:credentialID", checkAuth, updatePasskeyCredential);
 
 export default router;
