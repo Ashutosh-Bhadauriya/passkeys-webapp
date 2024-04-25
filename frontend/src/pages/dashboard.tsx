@@ -16,6 +16,18 @@ interface Credential {
     created_at: string;
 }
 
+const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = { 
+        month: 'long', 
+        day: 'numeric', 
+        year: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        hour12: true 
+    };
+    return new Date(dateString).toLocaleString('en-US', options);
+};
+
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -97,21 +109,21 @@ const Dashboard = () => {
     //             credentials: 'include',
     //             body: JSON.stringify(updatedData),
     //         });
-    
+
     //         if (!response.ok) {
     //             throw new Error('Failed to update credential');
     //         }
-    
+
     //         const responseData = await response.json();
     //         console.log('Update successful:', responseData);
-    
+
     //         // Update the local state to reflect the changed name
     //         setCredentials(currentCredentials =>
     //             currentCredentials.map(cred =>
     //                 cred.id === credentialID ? { ...cred, name: updatedData.name } : cred
     //             )
     //         );
-    
+
     //         // Show a success message
     //         toast.success("Credential updated successfully!");
     //     } catch (error) {
@@ -129,11 +141,11 @@ const Dashboard = () => {
     //             credentials: 'include',
     //             body: JSON.stringify(updatedData),
     //         });
-    
+
     //         if (!response.ok) {
     //             throw new Error(`Failed to update credential: ${response.status} ${response.statusText}`);
     //         }
-    
+
     //         // Attempt to read the response as text first
     //         const text = await response.text();
     //         let responseData;
@@ -143,16 +155,16 @@ const Dashboard = () => {
     //             console.error('Failed to parse JSON:', parseError);
     //             throw new Error('Received malformed JSON from server.');
     //         }
-    
+
     //         console.log('Update successful:', responseData);
-    
+
     //         // Update the local state to reflect the changed name
     //         setCredentials(currentCredentials =>
     //             currentCredentials.map(cred =>
     //                 cred.id === credentialID ? { ...cred, name: updatedData.name } : cred
     //             )
     //         );
-    
+
     //         // Show a success message
     //         toast.success("Credential updated successfully!");
     //     } catch (error) {
@@ -175,21 +187,21 @@ const Dashboard = () => {
                 credentials: 'include',
                 body: JSON.stringify(updatedData),
             });
-    
+
             if (!response.ok) {
                 throw new Error(`Failed to update credential: ${response.status} ${response.statusText}`);
             }
-    
+
             // Log the success message from the server
             console.log('Update successful');
-    
+
             // Update the local state to reflect the changed name
             setCredentials(currentCredentials =>
                 currentCredentials.map(cred =>
                     cred.id === credentialID ? { ...cred, name: updatedData.name } : cred
                 )
             );
-    
+
             // Show a success message
             toast.success("Credential updated successfully!");
         } catch (error) {
@@ -230,24 +242,26 @@ const Dashboard = () => {
                 </Button>
             </div>
             <div className="mt-8">
-                <h2>My Credentials</h2>
+                <h2 className="text-lg font-bold mb-4">My Credentials</h2>
                 {credentials.length > 0 ? (
                     credentials.map((cred) => (
                         <div key={cred.id} className="p-4 border rounded mb-2">
-                            <p>Id: {cred.id}</p>
-                            <p>Name: {cred.name}</p>
-                            <input
+                            {/* <p>Id: {cred.id}</p> */}
+                            <p> <span className="font-bold">Name:</span> {cred.name}</p>
+                            {/* <input
                                 type="text"
                                 value={editName[cred.id] || ''}
                                 onChange={(e) => setEditName({ ...editName, [cred.id]: e.target.value })}
                                 placeholder="New name"
-                            />
-                            <p>Last Used At: {new Date(cred.last_used_at).toLocaleString()}</p>
-                            <p>Created At: {new Date(cred.created_at).toLocaleString()}</p>
-                            <Button onClick={() => deleteCredential(cred.id)}>Delete</Button>
-                            <Button onClick={() => updateCredential(cred.id, { name: editName[cred.id] })}>
-                                Update Name
-                            </Button>
+                            /> */}
+                            <p> <span className="font-bold">Last Used At:</span> {formatDate(cred.last_used_at)}</p>
+                            <p> <span className="font-bold">Created At:</span> {formatDate(cred.created_at)}</p>
+                            <div className="flex space-x-4 mt-4 w-20">
+                                <Button onClick={() => updateCredential(cred.id, { name: editName[cred.id] })}>
+                                    Rename
+                                </Button>
+                                <Button variant='destructive' onClick={() => deleteCredential(cred.id)}>Delete</Button>
+                            </div>
                         </div>
                     ))
                 ) : (
